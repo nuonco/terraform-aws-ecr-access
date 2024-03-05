@@ -13,7 +13,3 @@ module "nuon_ecr_access" {
     aws_iam_policy.nuon_ecr_access.arn
   ]
 }
-
-output "ecr_access_iam_role" {
-  value = module.nuon_ecr_access.iam_role_arn
-}
