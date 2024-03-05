@@ -26,6 +26,6 @@ data "aws_iam_policy_document" "nuon_ecr_access" {
 }
 
 resource "aws_iam_policy" "nuon_ecr_access" {
-  name   = "aws-ecr-access"
+  name   = var.policy_name
   policy = data.aws_iam_policy_document.nuon_ecr_access.json
 }
