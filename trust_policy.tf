@@ -36,11 +36,12 @@ data "aws_iam_policy_document" "nuon_ecr_access_trust" {
         type        = "Federated"
         identifiers = ["accounts.google.com"]
       }
-      condition {
-        test     = "StringEquals"
-        variable = "accounts.google.com:aud"
-        values   = ["sts.amazonaws.com"]
-      }
+      # AWS's legacy `accounts.google.com` Federated principal silently expects
+      # the audience claim to be a Google OAuth 2.0 client ID. Constraining
+      # `accounts.google.com:aud` to anything else (e.g. `sts.amazonaws.com`,
+      # which is what GCP-hosted ctl-api/runner request) causes every assume
+      # call to fail with a generic AccessDenied. Trust is anchored on the
+      # `sub` claim — the SA's globally-unique numeric uniqueId, never reused.
       condition {
         test     = "StringEquals"
         variable = "accounts.google.com:sub"
